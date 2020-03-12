@@ -1,7 +1,7 @@
 import matplotlib
 from matplotlib import pyplot as plt
 import numpy as np
-
+# From giant_neural_network https://www.youtube.com/watch?v=LSr96IZQknc
 # Goal: Find what colour corresponds to the length and width of a flower petal
 # Input: [4.5, 1, ?]
 # My Data L,W,C (0 or 1)
@@ -37,20 +37,21 @@ def sigmoidPrime(x):
 # Scatter plot
 plt.axis([0, 7, 0, 7])
 plt.grid()
+plt.scatter(unknownFlower[0], unknownFlower[1], c = "#818284", s  = 50)
 for i in range(len(data)):
     point = data[i]
     colour = "r"
     if point[2] == 0:
         colour = "b"
     plt.scatter(point[0], point[1], c = colour)
-
 plt.show()
 
+print("Retraining and Calculating Unknown Flower")
 # Training
-learning_rate = .2
+learning_rate = .5
 costs = []
 
-for i in range(500000):
+for i in range(300000):
     ri = np.random.randint(len(data))
     point = data[ri]
 
@@ -99,8 +100,13 @@ for i in range(500000):
 # Prediction of unknownFlower
 z = unknownFlower[0] * w1 + unknownFlower[1] * w2 + b
 pred = sigmoid(z)
-print(pred)
-
+# Announce the colour and how sure the computer is
+# This allows user to better understand what the pred variable is (not accurate rep of %)
+if pred > .5:
+	print("The colour of this flower is red! I am {}% sure!".format(pred * 100))
+else:
+	print("The colour of this flower is blue! I am {}% sure!".format(abs(pred - 1) * 100))
+print(cost)
 # Plot
 plt.plot(costs)
 plt.show()
